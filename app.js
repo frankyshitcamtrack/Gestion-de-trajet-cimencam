@@ -10,22 +10,38 @@ const bodyParser = require("body-parser");
 
 const app = express();
 
+const trajetCimcamRouter = require('./src/routes/api.routes')
+
+const {onGetEntryExitCimencam,onGetEntryExitNotifications}= require('./src/controllers/api.controllers')
+
 app.use(morgan('combined'));
 
 app.use(cors());
 
 app.use(bodyParser.json());
 
+app.use(
+    bodyParser.urlencoded({
+      extended: true,
+  })
+);
+
 app.use(express.static(path.join(__dirname,'..','public')));
 
 app.use(express.static('public'))
  
-//app.use("/", Router);
+app.use("/cimencam", trajetCimcamRouter);
+
+onGetEntryExitNotifications();
+/* 
+setInterval(()=>{
+    onGetEntryExitCimencam()
+},3600000) */
 
 
 app.get("/",(req,res)=>{
     res.setHeader('Content-Type','text/html')
-    res.end('<h1>Application started</h1>');
+    res.end('<h1>Application started : Trajet cimencam</h1>');
     console.log('Application started');
 })
 
