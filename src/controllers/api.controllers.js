@@ -1,6 +1,6 @@
 const {getAllVehiclesByGroupId,getLandPointCimencam,getPlaceGroup,getVehiclesGroups,alertVhicles,getAllVehicles,getEntryExitData}=require('../services/service');
 const {POINT_CHARGEMENT_CIMENCAM,ALL_VEHICLE,PAGES,GEOFENCE}= require('../constants/constant');
-const {insertNotifications,getNotificationsOrderByVehicleID}=require('../models/model');
+const {insertNotifications,getNotificationsOrderByVehicleID,insertTrajet,getAllTrajets,getTrajetsByVehicleIdStartTimeEndTime}=require('../models/model');
 const {chunk}=require('../utils/basichuncks');
 const {getFistAndLastHourDay}= require('../utils/getfirstlasthourday')
 const _ = require('lodash');
@@ -146,7 +146,7 @@ async function onGetAllTrajets(){
 }
 
 //Get trajet cimencam and transporteur
-async function onGetTrajetCimencam(req, res) {
+async function onGetTrajetCimencam() {
 
     const getAllTrajets = await onGetAllTrajets();
 
@@ -198,12 +198,51 @@ async function onGetTrajetCimencam(req, res) {
                     }
                 }
             })
-
-            
-
-            return res.status(200).json(cimencamTrajet);
+             
+            if(cimencamTrajet){
+                const trajet = cimencamTrajet.filter(item=>(item.heureDepart&&item.heureDarriver));
+                trajet.map(item => insertTrajet(item.vehicleid,item.depart, Date.parse(item.heureDepart),item.arriver,Date.parse(item.heureDarriver),item.Trajet));
+                return trajet;
+            }
         }
 
+    }
+}
+
+
+async function onGetAllTrajetCimencam(req,res){
+    try{
+        const result= await getAllTrajets();
+    if (result) {
+        return res.status(200).json(result);
+    }
+
+    }catch (error) {
+        console.error('error of: ', error);
+    }
+}
+
+
+async function onGetTrajetVehicleByStarttime(req, res) { 
+    try {
+        const vehicleId = req.body.vehicleId;
+        const start = req.body.startDate;
+        const end = req.body.enDate;
+
+         if(!vehicleId || !start || !end){
+            return res.status(400).json({
+                error:'Missing require a parameter'
+            })
+         }
+
+         const result = await getTrajetsByVehicleIdStartTimeEndTime(vehicleId, start, end);
+
+        if (result) {
+            return res.status(200).json(result);
+        }
+
+    } catch (error) {
+        console.error('error of: ', error);
     }
 }
 
@@ -216,5 +255,7 @@ module.exports ={
     onGetAlertVehicles,
     onGetTrajetCimencam,
     onGetEntryExitNotifications,
-    onGetAllTrajets
+    onGetAllTrajets,
+    onGetAllTrajetCimencam,
+    onGetTrajetVehicleByStarttime
 }

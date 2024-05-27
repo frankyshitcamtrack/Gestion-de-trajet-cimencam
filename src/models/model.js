@@ -19,10 +19,39 @@ async function getNotificationsOrderByVehicleID(){
  }catch(error){
     console.log(error);
  }
-
 }
 
+function insertTrajet(vehicleid,depart,heuredepart,arriver,heuredarriver,trajet){
+    const query= pool.query('INSERT INTO trajets (vehicleid,depart,heuredepart,arriver,heuredarriver,trajet) VALUES ($1, $2, $3, $4, $5,$6) ON CONFLICT (heuredepart,heuredarriver) DO NOTHING', [vehicleid,depart,heuredepart,arriver,heuredarriver,trajet], (error, results) => {
+      if (error) {
+        throw error
+      }
+    }
+  )
+  
+   return query; 
+  }
 
-module.exports={insertNotifications,getNotificationsOrderByVehicleID}
+  async function getAllTrajets(){
+    try{
+        const data = await pool.query('SELECT * FROM trajets ORDER BY vehicleid,heuredepart');
+        return data.rows;
+     }catch(error){
+        console.log(error);
+     }
+  }
+
+  async function getTrajetsByVehicleIdStartTimeEndTime(vehicleId,start,end){
+    try{
+        const data = await pool.query('SELECT * FROM trajets WHERE (TRIM(heuredepart) BETWEEN $2 AND $3 ) AND TRIM(vehicleid)=$1',[vehicleId,start,end]);
+        return data.rows;
+     }catch(error){
+        console.log('sql error'+ '' +error);
+     }
+  }
+
+  
+
+module.exports={insertNotifications,getNotificationsOrderByVehicleID,insertTrajet,getTrajetsByVehicleIdStartTimeEndTime,getAllTrajets}
 
  

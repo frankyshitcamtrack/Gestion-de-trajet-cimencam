@@ -12,7 +12,7 @@ const app = express();
 
 const trajetCimcamRouter = require('./src/routes/api.routes')
 
-const {onGetEntryExitCimencam,onGetEntryExitNotifications}= require('./src/controllers/api.controllers')
+const {onGetEntryExitCimencam,onGetEntryExitNotifications,onGetTrajetCimencam}= require('./src/controllers/api.controllers')
 
 app.use(morgan('combined'));
 
@@ -32,11 +32,19 @@ app.use(express.static('public'))
  
 app.use("/cimencam", trajetCimcamRouter);
 
+
 onGetEntryExitNotifications();
-/* 
+onGetTrajetCimencam();
+
 setInterval(()=>{
-    onGetEntryExitCimencam()
-},3600000) */
+    onGetEntryExitNotifications();
+},7200000) 
+
+
+setInterval(()=>{
+    onGetTrajetCimencam();
+},21600000) 
+
 
 
 app.get("/",(req,res)=>{
