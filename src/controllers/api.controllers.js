@@ -55,7 +55,7 @@ async function onGetEntryExitNotifications() {
             const AllVehicleGroupId = vehiclegroups.filter(item => item.Description === ALL_VEHICLE)[0].Id;
             //all EntryNotifications
             const allNotifications = await Promise.all(PAGES.map(async item => {
-                const data = await getEntryExitData(AllVehicleGroupId, 1000, item,'20240519T000000','20240519T000000');
+                const data = await getEntryExitData(AllVehicleGroupId, 1000, item,date.firstHourDayFormat,date.lasthourDayFormat);
                 if (data) {
                     data.map(it => {
                         if (it) {
