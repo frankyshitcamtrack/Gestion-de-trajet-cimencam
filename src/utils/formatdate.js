@@ -19,8 +19,23 @@ function dateInYyyyMmDdHhMmSs(date) {
     );
 }
 
+function dateInYyyyMmDdHhMmSs2(date) {
+    return (
+      [
+        date.getFullYear(),
+        padTwoDigits(date.getMonth() + 1),
+        padTwoDigits(date.getDate()),
+      ].join("-") +
+      " " +
+      [
+        padTwoDigits(date.getHours()),
+        padTwoDigits(date.getMinutes()),
+        padTwoDigits(date.getSeconds()),
+      ].join(":")
+    );
+}
 
 
 
 
-module.exports = {dateInYyyyMmDdHhMmSs};
+module.exports = {dateInYyyyMmDdHhMmSs,dateInYyyyMmDdHhMmSs2};

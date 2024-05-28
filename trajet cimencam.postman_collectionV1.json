@@ -1,0 +1,26 @@
+{
+	"info": {
+		"_postman_id": "8c0a2c10-1412-4736-b587-95df7d4c525f",
+		"name": "trajet cimencam",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "4356146"
+	},
+	"item": [
+		{
+			"name": "getAllTrajetVehicle",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "ByVehicleIdStartTimeEndTime",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		}
+	]
+}

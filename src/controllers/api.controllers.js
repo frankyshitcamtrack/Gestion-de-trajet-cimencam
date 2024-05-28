@@ -2,7 +2,8 @@ const {getAllVehiclesByGroupId,getLandPointCimencam,getPlaceGroup,getVehiclesGro
 const {POINT_CHARGEMENT_CIMENCAM,ALL_VEHICLE,PAGES,GEOFENCE}= require('../constants/constant');
 const {insertNotifications,getNotificationsOrderByVehicleID,insertTrajet,getAllTrajets,getTrajetsByVehicleIdStartTimeEndTime}=require('../models/model');
 const {chunk}=require('../utils/basichuncks');
-const {getFistAndLastHourDay}= require('../utils/getfirstlasthourday')
+const {getFistAndLastHourDay}= require('../utils/getfirstlasthourday');
+const {dateInYyyyMmDdHhMmSs2}=require('../utils/formatdate')
 const _ = require('lodash');
 
 async function onGetAllVehiclesByGroupId(req,res){
@@ -201,7 +202,16 @@ async function onGetTrajetCimencam() {
              
             if(cimencamTrajet){
                 const trajet = cimencamTrajet.filter(item=>(item.heureDepart&&item.heureDarriver));
-                trajet.map(item => insertTrajet(item.vehicleid,item.depart, Date.parse(item.heureDepart),item.arriver,Date.parse(item.heureDarriver),item.Trajet));
+                trajet.map(item =>{
+                    const dateDapartTimstap=Date.parse(item.heureDepart);
+                    const newDateDepart = new Date(dateDapartTimstap)
+                    const formatDateDepart = dateInYyyyMmDdHhMmSs2(newDateDepart);
+              
+                    const dateArriverTimstap=Date.parse(item.heureDarriver);
+                    const newDateArriver = new Date(dateArriverTimstap)
+                    const formatDateArriver = dateInYyyyMmDdHhMmSs2(newDateArriver);
+                    insertTrajet(item.vehicleid,item.depart, formatDateDepart,item.arriver,formatDateArriver,item.Trajet);
+                } )
                 return trajet;
             }
         }
