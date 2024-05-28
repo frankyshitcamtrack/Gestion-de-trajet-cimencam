@@ -43,7 +43,7 @@ function insertTrajet(vehicleid,depart,heuredepart,arriver,heuredarriver,trajet)
 
   async function getTrajetsByVehicleIdStartTimeEndTime(vehicleId,start,end){
     try{
-        const data = await pool.query('SELECT * FROM trajets WHERE (TRIM(heuredepart) BETWEEN $2 AND $3 ) AND TRIM(vehicleid)=$1',[vehicleId,start,end]);
+        const data = await pool.query('SELECT * FROM trajets WHERE (TRIM(heuredepart) BETWEEN $2 AND $3 ) AND TRIM(vehicleid)=$1 ORDER BY heuredepart',[vehicleId,start,end]);
         return data.rows;
      }catch(error){
         console.log('sql error'+ '' +error);
