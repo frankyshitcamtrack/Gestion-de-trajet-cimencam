@@ -56,7 +56,7 @@ async function onGetEntryExitNotifications() {
             const AllVehicleGroupId = vehiclegroups.filter(item => item.Description === ALL_VEHICLE)[0].Id;
             //all EntryNotifications
             const allNotifications = await Promise.all(PAGES.map(async item => {
-                const data = await getEntryExitData(AllVehicleGroupId, 1000, item,date.firstHourDayFormat,date.lasthourDayFormat);
+                const data = await getEntryExitData(AllVehicleGroupId, 1000, item,'20240524T000000','20240528T235919');
                 if (data) {
                     data.map(it => {
                         if (it) {
@@ -80,7 +80,7 @@ async function onGetEntryExitNotifications() {
 
  
 //Get all trajet
-async function onGetAllTrajets(){
+async function onGetAllTrajets(req,res){
     const trajets=[]
     try{
         const result= await getNotificationsOrderByVehicleID();
@@ -133,9 +133,8 @@ async function onGetAllTrajets(){
                    trajets.push(it);
                 })
             });
-
             if(obj){
-                //return res.status(200).json(trajets)
+                //return res.status(200).json(chunks)
                 return trajets;
             }
         }
@@ -184,7 +183,7 @@ async function onGetTrajetCimencam() {
 
         if (geofences && pointChargementPlaces && pointDeChargementPlaces) {
 
-            const trajet = getAllTrajets.filter(item => (chargementPlaceDescription.includes(item.depart) && pointDeChargementDescription.includes(item.arriver)) || (chargementPlaceDescription.includes(item.depart)  && chargementPlaceDescription.includes(item.arriver)) || (pointDeChargementDescription.includes(item.depart) && pointDeChargementDescription.includes(item.arriver) || (pointDeChargementDescription.includes(item.depart) && chargementPlaceDescription.includes(item.arriver))));
+            const trajet = getAllTrajets.filter(item => (chargementPlaceDescription.includes(item.depart) && pointDeChargementDescription.includes(item.arriver)) || (chargementPlaceDescription.includes(item.depart)  && chargementPlaceDescription.includes(item.arriver)) || (pointDeChargementDescription.includes(item.depart) && pointDeChargementDescription.includes(item.arriver)));
              
             const cimencamTrajet = trajet.map(item => {
                 if (pointDeChargementDescription.includes(item.depart) && chargementPlaceDescription.includes(item.arriver)) {
