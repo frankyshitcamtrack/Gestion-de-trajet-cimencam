@@ -50,8 +50,25 @@ function insertTrajet(vehicleid,depart,heuredepart,arriver,heuredarriver,trajet)
      }
   }
 
+  async function getTrajetsByStartTimeEndTime(start,end){
+    try{
+        const data = await pool.query('SELECT * FROM trajets WHERE (TRIM(heuredepart) BETWEEN $1 AND $2 ) ORDER BY heuredepart',[start,end]);
+        return data.rows;
+     }catch(error){
+        console.log('sql error'+ '' +error);
+     }
+  }
   
+  async function getTrajetsByVehicleId(vehicleId){
+    try{
+        const data = await pool.query('SELECT * FROM trajets  WHERE TRIM(vehicleid)=$1 ORDER BY heuredepart',[vehicleId]);
+        return data.rows;
+     }catch(error){
+        console.log('sql error'+ '' +error);
+     }
+  }
 
-module.exports={insertNotifications,getNotificationsOrderByVehicleID,insertTrajet,getTrajetsByVehicleIdStartTimeEndTime,getAllTrajets}
+
+module.exports={insertNotifications,getNotificationsOrderByVehicleID,insertTrajet,getTrajetsByVehicleIdStartTimeEndTime,getAllTrajets,getTrajetsByStartTimeEndTime,getTrajetsByVehicleId}
 
  

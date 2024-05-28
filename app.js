@@ -38,7 +38,7 @@ onGetTrajetCimencam();
 
 setInterval(()=>{
     onGetEntryExitNotifications();
-},7200000) 
+},3600000 ) 
 
 
 setInterval(()=>{

@@ -1,6 +1,6 @@
 const {getAllVehiclesByGroupId,getLandPointCimencam,getPlaceGroup,getVehiclesGroups,alertVhicles,getAllVehicles,getEntryExitData}=require('../services/service');
 const {POINT_CHARGEMENT_CIMENCAM,ALL_VEHICLE,PAGES,GEOFENCE}= require('../constants/constant');
-const {insertNotifications,getNotificationsOrderByVehicleID,insertTrajet,getAllTrajets,getTrajetsByVehicleIdStartTimeEndTime}=require('../models/model');
+const {insertNotifications,getNotificationsOrderByVehicleID,insertTrajet,getAllTrajets,getTrajetsByVehicleIdStartTimeEndTime,getTrajetsByStartTimeEndTime,getTrajetsByVehicleId}=require('../models/model');
 const {chunk}=require('../utils/basichuncks');
 const {getFistAndLastHourDay}= require('../utils/getfirstlasthourday');
 const {dateInYyyyMmDdHhMmSs2}=require('../utils/formatdate')
@@ -258,6 +258,51 @@ async function onGetTrajetVehicleByStarttime(req, res) {
 
 
 
+async function onGetAllTrajetByStarttime(req, res) { 
+    try {
+        const start = req.body.startDate;
+        const end = req.body.enDate;
+
+         if(!start || !end){
+            return res.status(400).json({
+                error:'Missing require a parameter'
+            })
+         }
+
+         const result = await getTrajetsByStartTimeEndTime(start,end);
+
+        if (result) {
+            return res.status(200).json(result);
+        }
+
+    } catch (error) {
+        console.error('error of: ', error);
+    }
+}
+
+async function onGetTrajetVehicle(req, res) { 
+    try {
+        const vehicleId = req.body.vehicleId;
+
+         if(!vehicleId){
+            return res.status(400).json({
+                error:'Missing require a parameter'
+            })
+         }
+
+         const result = await getTrajetsByVehicleId(vehicleId);
+
+        if (result) {
+            return res.status(200).json(result);
+        }
+
+    } catch (error) {
+        console.error('error of: ', error);
+    }
+}
+
+
+
 module.exports ={
     onGetAllVehiclesByGroupId,
     onGetPlaceGroup,
@@ -267,5 +312,7 @@ module.exports ={
     onGetEntryExitNotifications,
     onGetAllTrajets,
     onGetAllTrajetCimencam,
-    onGetTrajetVehicleByStarttime
+    onGetTrajetVehicleByStarttime,
+    onGetAllTrajetByStarttime,
+    onGetTrajetVehicle
 }
