@@ -210,7 +210,7 @@ async function onGetTrajetCimencam() {
                     const dateArriverTimstap=Date.parse(item.heureDarriver);
                     const newDateArriver = new Date(dateArriverTimstap)
                     const formatDateArriver = dateInYyyyMmDdHhMmSs2(newDateArriver);
-                    insertTrajet(item.vehicleid,item.depart, item.heureDepart,item.arriver,item.heureDarriver,item.Trajet);
+                    insertTrajet(item.vehicleid,item.depart,formatDateDepart,item.arriver,formatDateArriver,item.Trajet);
                 } )
                 return trajet;
             }
