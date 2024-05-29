@@ -46,6 +46,10 @@ async function onGetAlertVehicles(req, res) {
 // get all notif entry Exit cimencam and strore in database
 async function onGetEntryExitNotifications() {
     const date = getFistAndLastHourDay()
+
+  /*   console.log(date.firstHourDayFormat);
+    
+    console.log(date.lasthourDayFormat); */
     try {
         const notifEntryExitCimencam = [];
 
@@ -56,7 +60,7 @@ async function onGetEntryExitNotifications() {
             const AllVehicleGroupId = vehiclegroups.filter(item => item.Description === ALL_VEHICLE)[0].Id;
             //all EntryNotifications
             const allNotifications = await Promise.all(PAGES.map(async item => {
-                const data = await getEntryExitData(AllVehicleGroupId, 1000, item,'20240524T000000','20240528T235919');
+                const data = await getEntryExitData(AllVehicleGroupId, 1000, item,date.firstHourDayFormat,date.lasthourDayFormat);
                 if (data) {
                     data.map(it => {
                         if (it) {

@@ -1,10 +1,10 @@
-const {dateInYyyyMmDdHhMmSs}=require('./formatdate')
+const {dateInYyyyMmDdHhMmSs,dateFormatMinusThreeDay}=require('./formatdate')
 
 
 function getFistAndLastHourDay(){
     let startOfDay = new Date();
     startOfDay.setHours(0, 0, 0, 0);
-    let firstHourDayFormat=dateInYyyyMmDdHhMmSs(startOfDay);
+    let firstHourDayFormat=dateFormatMinusThreeDay(startOfDay);
 
     let endofDay = new Date();
     endofDay.setHours(23, 59, 59, 999);   
