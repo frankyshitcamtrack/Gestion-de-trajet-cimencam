@@ -78,6 +78,7 @@ function getPlaceGroup() {
         headers: {
             'Authorization': `Basic ${token}`
         }
+
     };
 
     return axios.request(config)
@@ -143,11 +144,14 @@ function getEntryExitData(id,size,page,firstHourDay,lastHourDay){
             headers: {
                 'Authorization': `Basic ${token}`
             }
+
+           // https://us.mzoneweb.net/api/v2/vehiclegroups/c820bc02-0eac-4732-9fc3-96ff91dc1b20/placeentryexit/20240520T000000/20240520T235959.json?pg=20&ps=1000
+            
         };
 
     return axios.request(config)
             .then((response) => {
-                const data = response.data.Items;
+                const data = response.data;
                 return data;
             })
             .catch((error) => {

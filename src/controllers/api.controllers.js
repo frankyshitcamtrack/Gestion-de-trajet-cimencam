@@ -45,11 +45,8 @@ async function onGetAlertVehicles(req, res) {
 
 // get all notif entry Exit cimencam and strore in database
 async function onGetEntryExitNotifications() {
-    const date = getFistAndLastHourDay()
+    const date = getFistAndLastHourDay();
 
-  /*   console.log(date.firstHourDayFormat);
-    
-    console.log(date.lasthourDayFormat); */
     try {
         const notifEntryExitCimencam = [];
 
@@ -59,28 +56,37 @@ async function onGetEntryExitNotifications() {
             //Extract All vehicle Group Id
             const AllVehicleGroupId = vehiclegroups.filter(item => item.Description === ALL_VEHICLE)[0].Id;
             //all EntryNotifications
-            const allNotifications = await Promise.all(PAGES.map(async item => {
-                const data = await getEntryExitData(AllVehicleGroupId, 1000, item,date.firstHourDayFormat,date.lasthourDayFormat);
-                if (data) {
-                    data.map(it => {
-                        if (it) {
-                            notifEntryExitCimencam.push(it);
-                        }
-                    })
-                }
-            }
-            ));
+            const newData = await getEntryExitData(AllVehicleGroupId, 1000, 0,date.firstHourDayFormat,date.lasthourDayFormat);
+    
+            if(newData){
+                const pages=newData.TotalResults/newData.PageSize;
+                const arr=Array.apply(null, {length: pages+2}).map(Number.call, Number);
 
-            if (allNotifications) {
-                notifEntryExitCimencam.map(item => insertNotifications(item.PlaceDescription, item.VehicleId, item.DriverId, item.PlaceEntryLocalTimestamp, item.PlaceExitLocalTimestamp));
+                const allNotifications = await Promise.all(arr.map(async item => {
+                    const data = await getEntryExitData(AllVehicleGroupId, 1000, item, date.firstHourDayFormat, date.lasthourDayFormat);
+                    if (data) {
+                        data.Items.map(it => {
+                            if (it) {
+                                notifEntryExitCimencam.push(it);
+                                //console.log(notifEntryExitCimencam.length);
+                            }
+                        })
+                    }
+                }
+                ));
+                      
+                if (allNotifications) {
+                    notifEntryExitCimencam.map(item => insertNotifications(item.PlaceDescription, item.VehicleId, item.DriverId, item.PlaceEntryLocalTimestamp, item.PlaceExitLocalTimestamp));
+                }
+    
             }
+     
         }
 
     } catch (error) {
         console.error('error of: ', error);
     }
 }
-
 
  
 //Get all trajet
@@ -306,6 +312,119 @@ async function onGetTrajetVehicle(req, res) {
 
 
 
+//Get all trajet
+async function trajetsTest(req,res){
+    const trajets=[]
+    try{
+        const result= await getNotificationsOrderByVehicleID();
+       
+    if (result) {
+
+        //Group notifications By VehicleID
+        const groupNotifByVehicleId =_.groupBy(result,resu=>resu.vehicleid);
+
+        //change objects to arr and remove key 
+        const arrData = Object.keys(groupNotifByVehicleId).map((key) => {
+            return Object.values(groupNotifByVehicleId[[key]]) ;
+        });
+
+
+        //Create chunks of notifications by vehicle id
+        const chunks = arrData.map(item=>{
+           return chunk(item,2);
+        })
+
+        //creates trajet cimecam
+        const Arrtrajet = chunks.map(item=>{
+            if(item.length>0){
+                return item.map(it=>{
+                    if(it.length>1){
+                       var trajet = {
+                         vehicleid:it[0].vehicleid,
+                         id:it[0].id+it[1].id,
+                         depart:it[0].placedescription,
+                         heureDepart:it[0].exittime,
+                         arriver:it[1].placedescription,
+                         heureDarriver:it[1].entrytime,
+                       }
+                       return trajet
+                    }else{
+                        return  {
+                         vehicleid:it[0].vehicleid,
+                         id:it[0].id,
+                         arriver:it[0].placedescription,
+                         heureDarriver:it[0].entrytime,
+                         depart:it[0].placedescription,
+                         heureDepart:it[0].exittime,
+                       }
+                    }
+                   })
+                
+            }
+            
+        })
+
+        if (Arrtrajet && chunks) {
+            const obj = Arrtrajet.map(item=>{
+                return item.map(it=>{
+                   trajets.push(it);
+                })
+            });
+            
+            return res.status(200).json(chunks)
+        }
+    }
+
+    }catch (error) {
+        console.error('error of: ', error);
+    }
+}
+
+
+// get all notif entry Exit cimencam and strore in database
+async function onGetEntryExitNotificationsTest(req,res) {
+    const date = getFistAndLastHourDay()
+    try {
+        const notifEntryExitCimencam = [];
+
+        const vehiclegroups = await getVehiclesGroups();
+
+        if (vehiclegroups) {
+            //Extract All vehicle Group Id
+            const AllVehicleGroupId = vehiclegroups.filter(item => item.Description === ALL_VEHICLE)[0].Id;
+            //all EntryNotifications
+            const dataTest = await getEntryExitData(AllVehicleGroupId,1000,20,date.firstHourDayFormat,date.lasthourDayFormat);
+            if(dataTest){
+               return res.status(200).json(dataTest);
+            }
+    
+           /*  const allNotifications = await Promise.all(PAGES.map(async item => {
+                const data = await getEntryExitData(AllVehicleGroupId, 1000, item,date.firstHourDayFormat,date.lasthourDayFormat);
+                
+                if (data) {
+                    data.map(it => {
+                       
+                        if (it) {
+                            notifEntryExitCimencam.push(it);
+                            //console.log(notifEntryExitCimencam.length);
+                        }
+                    })
+                }
+            }
+            ));
+
+            if (allNotifications) {
+                notifEntryExitCimencam.map(item => insertNotifications(item.PlaceDescription, item.VehicleId, item.DriverId, item.PlaceEntryLocalTimestamp, item.PlaceExitLocalTimestamp));
+            } */
+        }
+
+    } catch (error) {
+        console.error('error of: ', error);
+    }
+}
+
+
+
 module.exports ={
     onGetAllVehiclesByGroupId,
     onGetPlaceGroup,
@@ -317,5 +436,7 @@ module.exports ={
     onGetAllTrajetCimencam,
     onGetTrajetVehicleByStarttime,
     onGetAllTrajetByStarttime,
-    onGetTrajetVehicle
+    onGetTrajetVehicle,
+    trajetsTest,
+    onGetEntryExitNotificationsTest,
 }

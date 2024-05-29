@@ -1,6 +1,6 @@
 const express = require('express');
 
-const {onGetAllVehiclesByGroupId,onGetPlaceGroup,onGetVehiclesGroups,onGetAlertVehicles,onGetTrajetCimencam,onGetAllTrajets,onGetTrajetVehicle ,onGetAllTrajetCimencam,onGetTrajetVehicleByStarttime,onGetAllTrajetByStarttime}= require('../controllers/api.controllers')
+const {onGetAllVehiclesByGroupId,onGetPlaceGroup,onGetVehiclesGroups,onGetAlertVehicles,onGetTrajetCimencam,onGetAllTrajets,onGetEntryExitNotificationsTest,onGetTrajetVehicle ,onGetAllTrajetCimencam,onGetTrajetVehicleByStarttime,onGetAllTrajetByStarttime,trajetsTest}= require('../controllers/api.controllers')
 
 const trajetRouter = express.Router();
 
@@ -25,5 +25,10 @@ trajetRouter.post('/TrajetsByStartDate',onGetAllTrajetByStarttime);
 
 
 trajetRouter.post('/TrajetsByVehicle',onGetTrajetVehicle);
+
+trajetRouter.get('/test', trajetsTest);
+
+trajetRouter.get('/notitest', onGetEntryExitNotificationsTest);
+
 
 module.exports= trajetRouter
