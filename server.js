@@ -17,7 +17,7 @@ const app = require('./app');
 //const server = http.createServer(app);
 
 //production
-const PORT = process.env.PORT || 8000;
+const PORT = process.env.PORT || 443;
 
 const options = {
   key: fs.readFileSync('./ssl/camtracknet.key'),
