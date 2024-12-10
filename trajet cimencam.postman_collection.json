@@ -2,7 +2,7 @@
 	"info": {
 		"_postman_id": "8c0a2c10-1412-4736-b587-95df7d4c525f",
 		"name": "trajet cimencam",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
 		"_exporter_id": "4356146"
 	},
 	"item": [
@@ -10,15 +10,76 @@
 			"name": "getAllTrajetVehicle",
 			"request": {
 				"method": "GET",
-				"header": []
+				"header": [],
+				"url": "http://45.10.162.168:8000/cimencam/trajetcimencam"
 			},
 			"response": []
 		},
 		{
 			"name": "ByVehicleIdStartTimeEndTime",
 			"request": {
-				"method": "GET",
-				"header": []
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n      \"vehicleId\":\"861732c7-7dae-435a-8796-939fd50e7096\",\r\n      \"startDate\":\"2024-12-01 14:07:22\",\r\n      \"enDate\":\"2024-12-9 05:40:01\"\r\n\r\n}\r\n\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://45.10.162.168:8000/cimencam/TrajetsByVehicleAndStartDate"
+			},
+			"response": []
+		},
+		{
+			"name": "getAllTrajetsByStarTime",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": {
+						"password": "H.holcimcmr2",
+						"username": "holcim cmr(d)"
+					}
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n      \"startDate\":\"2024-12-01 14:07:22\",\r\n      \"enDate\":\"2024-12-09 05:40:01\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://45.10.162.168:8000/cimencam/TrajetsByStartDate"
+			},
+			"response": []
+		},
+		{
+			"name": "getTrajetsByVehicleId",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": {
+						"password": "H.holcimcmr2",
+						"username": "holcim cmr(d)"
+					}
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n      \"vehicleId\":\"0166d294-3b53-4968-a561-aee0c4d36079\"\r\n\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://45.10.162.168:8000/cimencam/TrajetsByVehicle"
 			},
 			"response": []
 		}

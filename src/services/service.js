@@ -136,6 +136,7 @@ function alertVhicles(idVhicle){
 }
 
 
+
 function getEntryExitData(id,size,page,firstHourDay,lastHourDay){
         let config = {
             method: 'get',

@@ -55,6 +55,7 @@ async function onGetEntryExitNotifications() {
         if (vehiclegroups) {
             //Extract All vehicle Group Id
             const AllVehicleGroupId = vehiclegroups.filter(item => item.Description === ALL_VEHICLE)[0].Id;
+
             //all EntryNotifications
             const newData = await getEntryExitData(AllVehicleGroupId, 1000, 0,date.firstHourDayFormat,date.lasthourDayFormat);
     
@@ -68,6 +69,7 @@ async function onGetEntryExitNotifications() {
                         data.Items.map(it => {
                             if (it) {
                                 notifEntryExitCimencam.push(it);
+                                insertNotifications(it.PlaceDescription, it.VehicleId, it.DriverId, it.PlaceEntryLocalTimestamp, it.PlaceExitLocalTimestamp)
                                 //console.log(notifEntryExitCimencam.length);
                             }
                         })
@@ -75,10 +77,10 @@ async function onGetEntryExitNotifications() {
                 }
                 ));
                       
-                if (allNotifications) {
+            /*   if (allNotifications) {
                     notifEntryExitCimencam.map(item => insertNotifications(item.PlaceDescription, item.VehicleId, item.DriverId, item.PlaceEntryLocalTimestamp, item.PlaceExitLocalTimestamp));
-                }
-    
+              } 
+     */
             }
      
         }
@@ -371,7 +373,7 @@ async function trajetsTest(req,res){
                 })
             });
             
-            return res.status(200).json(chunks)
+            return res.status(200).json(Arrtrajet)
         }
     }
 
@@ -395,7 +397,7 @@ async function onGetEntryExitNotificationsTest(req,res) {
             //all EntryNotifications
             const dataTest = await getEntryExitData(AllVehicleGroupId,1000,20,date.firstHourDayFormat,date.lasthourDayFormat);
             if(dataTest){
-               return res.status(200).json(dataTest);
+               return res.status(200).json(AllVehicleGroupId);
             }
     
            /*  const allNotifications = await Promise.all(PAGES.map(async item => {
