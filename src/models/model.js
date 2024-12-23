@@ -23,7 +23,7 @@ function insertNotifications(
 async function getNotificationsOrderByVehicleID() {
   try {
     const data = await pool.query(
-      'SELECT * FROM notifications ORDER BY vehicleid ASC,exittime'
+      'SELECT * FROM notifications ORDER BY vehicleid ASC'
     );
     return data.rows;
   } catch (error) {

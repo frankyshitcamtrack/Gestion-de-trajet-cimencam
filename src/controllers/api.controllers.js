@@ -9,6 +9,7 @@ const {
 } = require('../services/service');
 const {
   POINT_CHARGEMENT_CIMENCAM,
+  POINT_DECHARGEMENT_CIMENCAM,
   ALL_VEHICLE,
   PAGES,
   GEOFENCE,
@@ -162,7 +163,7 @@ async function onGetAllTrajets(req, res) {
       const Arrtrajet = chunks.map((item) => {
         return item.map((it) => {
           if (it.length > 1) {
-            var trajet = {
+            const trajet = {
               vehicleid: it[0].vehicleid,
               id: it[0].id + it[1].id,
               depart: it[0].placedescription,
@@ -215,6 +216,11 @@ async function onGetTrajetCimencam() {
       (item) => item.Description === POINT_CHARGEMENT_CIMENCAM
     )[0].Id;
 
+    //Extract point de dechargement group Id
+    const pointDeDeChargementGroupId = placeGoup.filter(
+      (item) => item.Description === POINT_DECHARGEMENT_CIMENCAM
+    )[0].Id;
+
     //Extract geofence group Id
     const geofenceGroupId = placeGoup.filter(
       (item) => item.Description === GEOFENCE
@@ -232,13 +238,20 @@ async function onGetTrajetCimencam() {
     });
 
     //Extract points de dechargement places
-    const pointDeChargementPlaces = geofences.filter(
-      (it) => !chargementPlaceDescription.includes(it.Description)
+    const pointDeChargementPlaces = await getLandPointCimencam(
+      pointDeDeChargementGroupId
     );
     const pointDeChargementDescription = pointDeChargementPlaces.map((item) => {
       return item.Description;
     });
 
+    /*     const pointDeChargementPlaces = geofences.filter(
+      (it) => !chargementPlaceDescription.includes(it.Description)
+    );
+    const pointDeChargementDescription = pointDeChargementPlaces.map((item) => {
+      return item.Description;
+    });
+ */
     if (geofences && pointChargementPlaces && pointDeChargementPlaces) {
       const trajet = getAllTrajets.filter(
         (item) =>
@@ -271,7 +284,7 @@ async function onGetTrajetCimencam() {
         const trajet = cimencamTrajet.filter(
           (item) => item.heureDepart && item.heureDarriver
         );
-        trajet.map((item) => {
+        trajet.forEach((item) => {
           const dateDapartTimstap = Date.parse(item.heureDepart);
           const newDateDepart = new Date(dateDapartTimstap);
           const formatDateDepart = dateInYyyyMmDdHhMmSs2(newDateDepart);
@@ -288,6 +301,7 @@ async function onGetTrajetCimencam() {
             item.Trajet
           );
         });
+
         return trajet;
       }
     }
