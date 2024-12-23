@@ -1,8 +1,17 @@
-//const http = require('http');
+//locale
+/* const http = require('http');
 
-//const PORT = process.env.PORT || 8000;
+const fs = require('fs');
 
-//const server = http.createServer(app);
+require('dotenv').config();
+
+const PORT = process.env.PORT || 8000;
+
+const app = require('./app');
+
+const server = http.createServer(app); */
+
+//production
 
 const https = require('https');
 
@@ -12,11 +21,6 @@ require('dotenv').config();
 
 const app = require('./app');
 
-//locale
-//const PORT = process.env.PORT || 8000;
-//const server = http.createServer(app);
-
-//production
 const PORT = process.env.PORT || 443;
 
 const options = {

@@ -11,7 +11,7 @@
 			"request": {
 				"method": "GET",
 				"header": [],
-				"url": "http://45.10.162.168:8000/cimencam/trajetcimencam"
+				"url": "https://trajetcimencam.camtrack.net/cimencam/trajetcimencam"
 			},
 			"response": []
 		},
@@ -29,7 +29,7 @@
 						}
 					}
 				},
-				"url": "http://45.10.162.168:8000/cimencam/TrajetsByVehicleAndStartDate"
+				"url": "https://trajetcimencam.camtrack.net/cimencam/TrajetsByVehicleAndStartDate"
 			},
 			"response": []
 		},
@@ -54,7 +54,7 @@
 						}
 					}
 				},
-				"url": "http://45.10.162.168:8000/cimencam/TrajetsByStartDate"
+				"url": "https://trajetcimencam.camtrack.net/cimencam/TrajetsByStartDate"
 			},
 			"response": []
 		},
@@ -79,7 +79,7 @@
 						}
 					}
 				},
-				"url": "http://45.10.162.168:8000/cimencam/TrajetsByVehicle"
+				"url": "https://trajetcimencam.camtrack.net/cimencam/TrajetsByVehicle"
 			},
 			"response": []
 		}
