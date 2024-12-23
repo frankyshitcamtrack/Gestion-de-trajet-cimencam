@@ -36,8 +36,8 @@ app.use(express.static('public'));
 
 app.use('/cimencam', trajetCimcamRouter);
 
-//onGetEntryExitNotifications();
-//onGetTrajetCimencam();
+onGetEntryExitNotifications();
+onGetTrajetCimencam();
 
 setInterval(() => {
   onGetEntryExitNotifications();
